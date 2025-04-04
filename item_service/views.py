@@ -73,3 +73,8 @@ class ItemDetailView(APIView):
             return Response({'error': 'Item not found.'}, status=status.HTTP_404_NOT_FOUND)
         item.delete()
         return Response({'message': 'Item deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+    
+class DeleteAllItemsView(APIView):
+    def delete(self, request):
+        Item.objects.all().delete()
+        return Response({"message": "🗑️ All items deleted successfully!"})

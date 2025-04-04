@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AddItemView, ItemDetailView, ItemListView
+from .views import AddItemView, DeleteAllItemsView, ItemDetailView, ItemListView
 
 urlpatterns = [
     path('add/', AddItemView.as_view(), name='add-item'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('edit/<int:pk>/', ItemDetailView.as_view(), name='item-edit'),     # dùng chung view
     path('delete/<int:pk>/', ItemDetailView.as_view(), name='item-delete'),
     path('create/', AddItemView.as_view(), name='item-create'), 
+    path('delete_all/', DeleteAllItemsView.as_view(), name='item-delete-all'),
 ]
