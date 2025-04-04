@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-0 d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="var(--primary-color)"
+                class="bi bi-credit-card me-2" viewBox="0 0 16 16">
+                <path
+                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+                <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+            </svg>
+            Checkout
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-4">Payment Method</h5>
+                <form method="POST" action="/api/payments/process/" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order_id }}">
+
+                    <div class="mb-4">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="method" id="cod" value="cod" checked>
+                            <label class="form-check-label d-flex align-items-center" for="cod">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-cash me-2" viewBox="0 0 16 16">
+                                    <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                                    <path
+                                        d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z" />
+                                </svg>
+                                Cash on Delivery
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="method" id="bank" value="bank">
+                            <label class="form-check-label d-flex align-items-center" for="bank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-bank me-2" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 .95 14.61 4h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.379l.5 2A.5.5 0 0 1 15.5 17H.5a.5.5 0 0 1-.485-.621l.5-2A.5.5 0 0 1 1 14V7H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 4h.89L8 .95zM3.776 4h8.447L8 2.05 3.776 4zM2 7v7h1V7H2zm2 0v7h2.5V7H4zm3.5 0v7h1V7h-1zm2 0v7H12V7H9.5zM13 7v7h1V7h-1zm2-1V5H1v1h14zm-.39 9H1.39l-.25 1h13.72l-.25-1z" />
+                                </svg>
+                                Bank Transfer
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="method" id="credit_card"
+                                value="credit_card">
+                            <label class="form-check-label d-flex align-items-center" for="credit_card">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-credit-card me-2" viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+                                    <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+                                </svg>
+                                Credit Card
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="credit-card-details" class="mb-4 d-none">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Expiration Date</label>
+                                <input type="text" class="form-control" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control" placeholder="123">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Cardholder Name</label>
+                                <input type="text" class="form-control" placeholder="John Doe">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="mb-3">Shipping Address</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Province/State</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-lock-fill me-2" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                            </svg>
+                            Complete Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-4">Order Summary</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <span>{{ subtotal|default:"0" }} VND</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Shipping</span>
+                    <span>{{ shipping|default:"0" }} VND</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax</span>
+                    <span>{{ tax|default:"0" }} VND</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span class="text-primary">{{ total|default:"0" }} VND</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title mb-3">Need Help?</h5>
+                <p class="card-text">If you have any questions about your order, please contact our customer support.
+                </p>
+                <div class="d-grid">
+                    <a href="#" class="btn btn-outline-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-headset me-2" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z" />
+                        </svg>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show/hide credit card details based on payment method selection
+    document.querySelectorAll('input[name="method"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            const creditCardDetails = document.getElementById('credit-card-details');
+            if (this.value === 'credit_card') {
+                creditCardDetails.classList.remove('d-none');
+            } else {
+                creditCardDetails.classList.add('d-none');
+            }
+        });
+    });
+
+    // Form validation
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}
